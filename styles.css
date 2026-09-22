@@ -1,4 +1,4 @@
-        :root {
+:root {
             --bg-dark: #0a0a0a;
             --panel-bg: #121212;
             --card-light: #eae6df;
@@ -162,6 +162,15 @@
             font-weight: 800;
             letter-spacing: 2px;
             text-transform: uppercase;
+        }
+
+        #header-title {
+            cursor: pointer;
+            transition: opacity 0.15s ease;
+        }
+
+        #header-title:hover {
+            opacity: 0.65;
         }
 
         .nav-controls {
@@ -976,6 +985,149 @@
         .dates-info {
             font-family: var(--font-mono);
             font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        /* --- YEAR OVERVIEW MODAL --- */
+        .year-modal-box {
+            max-width: 640px !important;
+            height: auto !important;
+            max-height: 88vh;
+        }
+
+        .year-modal-body {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow-y: auto;
+        }
+
+        .year-nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+        }
+
+        .year-nav-btn {
+            font-family: var(--font-mono);
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-main);
+            background-color: #141414;
+            border: 1px solid var(--border-color);
+            border-radius: 2px;
+            padding: 4px 14px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .year-nav-btn:hover {
+            background-color: var(--border-color);
+        }
+
+        .year-nav-label {
+            font-family: var(--font-heading);
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            min-width: 110px;
+            text-align: center;
+        }
+
+        .year-heatmap-wrap {
+            padding: 4px 4px 8px 4px;
+        }
+
+        .year-heatmap-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(13px, 1fr));
+            grid-auto-rows: minmax(13px, 1fr);
+            gap: 4px;
+        }
+
+        .year-dot {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background-color: #232323;
+        }
+
+        .year-dot.active {
+            background-color: #ffffff;
+        }
+
+        .year-dot.today {
+            box-shadow: 0 0 0 2px #ff9900;
+        }
+
+        .year-heatmap-legend {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--text-muted);
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: -8px;
+        }
+
+        .year-chart-title {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 16px;
+        }
+
+        .year-bar-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 6px;
+            padding: 4px 4px 0 4px;
+        }
+
+        .year-bar-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            min-width: 0;
+        }
+
+        .year-bar-value {
+            font-family: var(--font-mono);
+            font-size: 8px;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .year-bar-track {
+            width: 100%;
+            max-width: 26px;
+            height: 110px;
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .year-bar {
+            width: 100%;
+            background-color: #ff9900;
+            border-radius: 3px 3px 0 0;
+            min-height: 2px;
+            transition: height 0.3s ease;
+        }
+
+        .year-bar-col.is-current-month .year-bar {
+            background-color: #ffffff;
+        }
+
+        .year-bar-label {
+            font-family: var(--font-mono);
+            font-size: 9px;
             color: var(--text-muted);
             text-transform: uppercase;
         }

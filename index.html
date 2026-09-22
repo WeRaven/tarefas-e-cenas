@@ -32,7 +32,7 @@
 
     <!-- MAIN APP HEADER -->
     <header>
-        <div class="brand" id="header-title">TASKS AND SCENES</div>
+        <div class="brand" id="header-title" title="CLICK TO VIEW YEAR OVERVIEW">TASKS AND SCENES</div>
         <div class="nav-controls">
             <button class="btn btn-secondary" id="back-btn" style="display: none;">PROJECTS</button>
             <button class="btn" id="main-action-btn">NEW PROJECT</button>
@@ -77,6 +77,31 @@
             </div>
             <div class="metrics-stats" id="metrics-stats-text">// TASKS: 0/0 &middot; SCENES: 0 &middot; TIME: 00:00:00</div>
             <div class="metrics-toggle-arrow" id="metrics-toggle-arrow">&#9650; CALENDAR</div>
+        </div>
+    </div>
+
+    <!-- YEAR OVERVIEW MODAL -->
+    <div class="modal-overlay" id="year-modal">
+        <div class="modal-box year-modal-box">
+            <div class="modal-header">
+                <div class="modal-title">YEAR OVERVIEW</div>
+                <div class="close-btn" id="close-year-modal">[ESC] CLOSE</div>
+            </div>
+            <div class="modal-body year-modal-body">
+                <div class="year-nav">
+                    <span class="year-nav-btn" id="year-prev-btn">&lsaquo;</span>
+                    <span class="year-nav-label" id="year-nav-label">-</span>
+                    <span class="year-nav-btn" id="year-next-btn">&rsaquo;</span>
+                </div>
+
+                <div class="year-heatmap-wrap">
+                    <div class="year-heatmap-grid" id="year-heatmap-grid"></div>
+                </div>
+                <div class="year-heatmap-legend" id="year-heatmap-legend">// 0 DAYS ACTIVE</div>
+
+                <div class="year-chart-title">// TIME WORKED PER MONTH</div>
+                <div class="year-bar-chart" id="year-bar-chart"></div>
+            </div>
         </div>
     </div>
 

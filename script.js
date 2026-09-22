@@ -27,6 +27,10 @@ const ZOOM_STEP = 0.15;
 let calendarViewDate = new Date();
 let selectedCalendarDay = null;
 
+// --- YEAR OVERVIEW STATE ---
+let yearModalViewYear = new Date().getFullYear();
+const MONTH_SHORT_LABELS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+
 const NODE_WIDTH = 220;
 const NODE_HEIGHT = 140;
 
@@ -849,9 +853,125 @@ function renderDayDetail(dayKey) {
     `;
 }
 
+/* ================= YEAR OVERVIEW MODAL ================= */
+
+function openYearModal() {
+    yearModalViewYear = new Date().getFullYear();
+    renderYearModal();
+    document.getElementById('year-modal').classList.add('active');
+}
+
+function closeYearModal() {
+    document.getElementById('year-modal').classList.remove('active');
+}
+
+function renderYearModal() {
+    const label = document.getElementById('year-nav-label');
+    if (label) label.textContent = yearModalViewYear;
+    renderYearHeatmap(yearModalViewYear);
+    renderYearBarChart(yearModalViewYear);
+}
+
+function renderYearHeatmap(year) {
+    const grid = document.getElementById('year-heatmap-grid');
+    const legend = document.getElementById('year-heatmap-legend');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    // Grade retangular simples (dia 1 até o último dia do ano, em ordem),
+    // que se ajusta sozinha à largura do modal, sem precisar de scroll.
+    const daysInYear = (new Date(year, 1, 29).getMonth() === 1) ? 366 : 365;
+    const now = new Date();
+    const todayKey = formatDateKey(now);
+    let activeCount = 0;
+
+    for (let dayIndex = 0; dayIndex < daysInYear; dayIndex++) {
+        const dateObj = new Date(year, 0, dayIndex + 1);
+        const dayKey = formatDateKey(dateObj);
+        const dot = document.createElement('div');
+        dot.className = 'year-dot';
+
+        const isFuture = dateObj > now;
+        if (!isFuture && dayHasActivity(dayKey)) {
+            dot.classList.add('active');
+            activeCount++;
+        }
+        if (dayKey === todayKey) {
+            dot.classList.add('today');
+        }
+        dot.title = dayKey;
+
+        grid.appendChild(dot);
+    }
+
+    if (legend) {
+        legend.textContent = `// ${activeCount} DAY${activeCount === 1 ? '' : 'S'} ACTIVE IN ${year}`;
+    }
+}
+
+function renderYearBarChart(year) {
+    const container = document.getElementById('year-bar-chart');
+    if (!container) return;
+    container.innerHTML = '';
+
+    const monthTotals = new Array(12).fill(0);
+    const dailyTime = appData.dailyTime || {};
+    Object.keys(dailyTime).forEach(key => {
+        const parts = key.split('-');
+        const y = parseInt(parts[0], 10);
+        const m = parseInt(parts[1], 10);
+        if (y === year) {
+            monthTotals[m - 1] += dailyTime[key] || 0;
+        }
+    });
+
+    const maxVal = Math.max(...monthTotals, 1);
+    const now = new Date();
+    const isCurrentYear = year === now.getFullYear();
+
+    monthTotals.forEach((secs, idx) => {
+        const col = document.createElement('div');
+        col.className = 'year-bar-col';
+        if (isCurrentYear && idx === now.getMonth()) {
+            col.classList.add('is-current-month');
+        }
+
+        const heightPct = secs > 0 ? Math.max((secs / maxVal) * 100, 4) : 0;
+        const valueLabel = secs > 0 ? formatTime(secs) : '--';
+
+        col.innerHTML = `
+            <span class="year-bar-value">${valueLabel}</span>
+            <div class="year-bar-track">
+                <div class="year-bar" style="height:${heightPct}%;"></div>
+            </div>
+            <span class="year-bar-label">${MONTH_SHORT_LABELS[idx]}</span>
+        `;
+        container.appendChild(col);
+    });
+}
+
 function setupEventListeners() {
     document.getElementById('back-btn').addEventListener('click', () => {
         switchView('projects');
+    });
+
+    // --- YEAR OVERVIEW MODAL ---
+    document.getElementById('header-title').addEventListener('click', () => {
+        openYearModal();
+    });
+
+    document.getElementById('close-year-modal').addEventListener('click', () => {
+        closeYearModal();
+    });
+
+    document.getElementById('year-prev-btn').addEventListener('click', () => {
+        yearModalViewYear--;
+        renderYearModal();
+    });
+
+    document.getElementById('year-next-btn').addEventListener('click', () => {
+        yearModalViewYear++;
+        renderYearModal();
     });
 
     document.getElementById('main-action-btn').addEventListener('click', () => {
