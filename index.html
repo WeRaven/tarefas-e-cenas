@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TASKS AND SCENES</title>
+
+    <!-- Fonte Brutalista e Pesada -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- INTRO SPLASH SCREEN -->
+    <div id="intro-screen">
+        <div class="intro-wrapper">
+            <div class="focus-container">
+                <span class="char">F</span>
+                <div class="toggle-o">
+                    <div class="toggle-knob"></div>
+                </div>
+                <span class="char">C</span>
+                <span class="char">U</span>
+                <span class="char">S</span>
+            </div>
+            <div class="credits">made by Ninekishi</div>
+        </div>
+    </div>
+
+    <!-- MAIN APP HEADER -->
+    <header>
+        <div class="brand" id="header-title">TASKS AND SCENES</div>
+        <div class="nav-controls">
+            <button class="btn btn-secondary" id="back-btn" style="display: none;">PROJECTS</button>
+            <button class="btn" id="main-action-btn">NEW PROJECT</button>
+        </div>
+    </header>
+
+    <!-- PROJECTS VIEW -->
+    <div id="projects-view" class="view-screen active">
+        <div class="section-title">// DIRECTORY OF PROJECTS</div>
+        <div class="projects-grid" id="projects-container"></div>
+    </div>
+
+    <!-- CANVAS VIEW -->
+    <div id="canvas-view" class="view-screen">
+        <div id="canvas-container">
+            <svg id="connections-layer"></svg>
+        </div>
+        <div class="zoom-controls">
+            <button class="zoom-btn" id="zoom-in-btn" title="ZOOM IN">+</button>
+            <button class="zoom-btn" id="zoom-out-btn" title="ZOOM OUT">&minus;</button>
+            <button class="zoom-btn" id="zoom-reset-btn" title="RESET">100%</button>
+        </div>
+    </div>
+
+    <!-- METRICS BAR + CALENDAR -->
+    <div class="metrics-bar" id="metrics-bar">
+        <div class="calendar-panel" id="calendar-panel">
+            <div class="calendar-panel-header">
+                <span class="calendar-nav-btn" id="calendar-prev-btn">&lsaquo; PREV</span>
+                <span class="calendar-month-label" id="calendar-month-label">-</span>
+                <span class="calendar-nav-btn" id="calendar-next-btn">NEXT &rsaquo;</span>
+            </div>
+            <div class="calendar-grid" id="calendar-grid"></div>
+            <div class="calendar-detail" id="calendar-detail">
+                <div class="calendar-detail-title">SELECT A DAY</div>
+            </div>
+        </div>
+        <div class="metrics-bar-content" id="metrics-bar-toggle">
+            <div class="metrics-progress-wrap">
+                <div class="metrics-progress-track"><div class="metrics-progress-fill" id="metrics-progress-fill"></div></div>
+                <span class="metrics-progress-label" id="metrics-progress-label">0%</span>
+            </div>
+            <div class="metrics-stats" id="metrics-stats-text">// TASKS: 0/0 &middot; SCENES: 0 &middot; TIME: 00:00:00</div>
+            <div class="metrics-toggle-arrow" id="metrics-toggle-arrow">&#9650; CALENDAR</div>
+        </div>
+    </div>
+
+    <!-- PROJECT MODAL (CRIAR E EDITAR PROJETO) -->
+    <div class="modal-overlay" id="project-modal">
+        <div class="modal-box brutal-modal">
+            <div class="modal-header">
+                <div class="modal-title" id="project-modal-title">CREATE NEW PROJECT</div>
+                <div class="close-btn" id="close-project-modal">[ESC] CANCEL</div>
+            </div>
+            <div class="modal-body">
+                <div class="modal-column">
+                    <div class="field-label">
+                        <span>[01] PROJECT TITLE</span>
+                    </div>
+                    <input type="text" id="project-name-input" placeholder="TYPE TITLE HERE..." autocomplete="off">
+
+                    <div class="field-label" style="margin-top: 8px;">
+                        <span>[02] IDENTIFIER COLOR</span>
+                    </div>
+                    <div class="color-selector-grid" id="color-picker">
+                        <div class="color-card-option selected" data-color="#888888" style="--preview-color: #888888;">
+                            <div class="color-preview"></div>
+                            <span class="color-name">GRAY</span>
+                        </div>
+                        <div class="color-card-option" data-color="#ff4444" style="--preview-color: #ff4444;">
+                            <div class="color-preview"></div>
+                            <span class="color-name">RED</span>
+                        </div>
+                        <div class="color-card-option" data-color="#44bb44" style="--preview-color: #44bb44;">
+                            <div class="color-preview"></div>
+                            <span class="color-name">GREEN</span>
+                        </div>
+                        <div class="color-card-option" data-color="#4488ff" style="--preview-color: #4488ff;">
+                            <div class="color-preview"></div>
+                            <span class="color-name">BLUE</span>
+                        </div>
+                        <div class="color-card-option" data-color="#eeb000" style="--preview-color: #eeb000;">
+                            <div class="color-preview"></div>
+                            <span class="color-name">GOLD</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div></div>
+                <button class="btn" id="save-project-btn">SAVE PROJECT</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCENE CONFIG MODAL -->
+    <div class="modal-overlay" id="scene-modal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <div class="modal-title">SCENE CONFIGURATION</div>
+                <div class="close-btn" id="close-scene-modal">[ESC] CLOSE</div>
+            </div>
+            <div class="modal-body">
+                <div class="modal-column">
+                    <div class="field-label">SCENE TITLE</div>
+                    <input type="text" id="scene-title-input" placeholder="SCENE TITLE">
+
+                    <div class="field-label">DESCRIPTION AND NOTES</div>
+                    <textarea id="scene-desc-input" placeholder="WRITE DETAILED DESCRIPTION OR LOGIC HERE..."></textarea>
+                </div>
+                <div class="modal-column">
+                    <div class="field-label">TASKS CHECKLIST</div>
+                    <div class="task-input-group">
+                        <input type="text" id="task-input" placeholder="NEW TASK">
+                        <button class="btn" id="add-task-btn">ADD</button>
+                    </div>
+                    <div class="task-list" id="tasks-container"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="dates-info" id="dates-display">CREATED: - | EDITED: -</div>
+                <button class="btn" id="save-scene-btn">SAVE CHANGES</button>
+            </div>
+        </div>
+    </div>
+
+<script src="script.js"></script>
+</body>
+</html>
